@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<population xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://example.com">
+  <success>true</success>
+  <row_count>2</row_count>
+  <summary>
+    <bananas>0</bananas>
+  </summary>
+  <people>
+      <person>
+          <firstname>Michael</firstname>
+          <age>25</age>
+      </person>
+      <person>
+          <firstname>Eliezer</firstname>
+          <age>2</age>
+      </person>
+  </people>
+</population>
