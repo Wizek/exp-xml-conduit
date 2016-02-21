@@ -32,4 +32,5 @@ executable exp-xml-conduit
     , xml-hamlet
     , pretty-show
     , containers
+    , compose-ltr
 
