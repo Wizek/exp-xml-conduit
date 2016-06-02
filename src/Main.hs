@@ -59,9 +59,9 @@ parsePerson :: MonadThrow m => Consumer Event m (Maybe Person)
 parsePerson = tagNoAttr "{http://example.com}person" $ do
         name <- force "firstname tag missing" $ tagNoAttr "{http://example.com}firstname" content
         ageText <- force "age tag missing" $ tagNoAttr "{http://example.com}age" content
-        case decimal ageText of
-            Right (age, "") -> return $ Person age name
-            _ -> force "invalid age value" $ return Nothing
+        case decimal (T.strip ageText) of
+            Right (age, "") -> return $ Person age (T.strip name)
+            Left a -> force ("invalid age value: " ++ a) $ return Nothing
 
 parsePeople :: MonadThrow m => Consumer Event m [Person]
 parsePeople = force "no people tag" $ do
@@ -77,7 +77,7 @@ parsePopulation = force "population tag missing" $
     tagName "{http://example.com}population" ignoreAttrs $ \() -> parsePeople
 
 -- fName = "/home/wizek/sandbox/exp-xml/exp-xml-conduit/inp.xml"
-fName = "/home/wizek/sandbox/exp-xml/exp-xml-conduit/inpLarge.xml"
+fName = "/home/wizek/sandbox/exp-xml/exp-xml-conduit/inpLarge2.xml"
 -- fName = "inp.xml"
 
 -- instance PrettyVal Node
@@ -106,10 +106,10 @@ documentify nodes = Document (Prologue [] Nothing []) (Element "root" Map.empty 
 
 main :: IO ()
 main = do
-  -- hPutStrLn stderr "init"
-  -- people <- runResourceT $
-  --   parseFile def fName $$ parsePopulation
-  -- print $ take 10 $ drop 100 people
+  hPutStrLn stderr "init"
+  people <- runResourceT $
+    parseFile def fName $$ parsePopulation
+  print $ take 2 $ drop 100 people
   -- print xmlNodes
   -- putStrLn $ dumpStr xmlNodes
-  L.putStrLn $ renderText def{rsPretty=True} $ documentify xmlNodes
+  -- L.putStrLn $ renderText def{rsPretty=True} $ documentify xmlNodes
